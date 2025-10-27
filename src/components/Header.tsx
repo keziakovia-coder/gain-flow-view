@@ -3,9 +3,10 @@ import { Button } from "@/components/ui/button";
 
 interface HeaderProps {
   onAddGain: () => void;
+  onSetGoal: () => void;
 }
 
-export const Header = ({ onAddGain }: HeaderProps) => {
+export const Header = ({ onAddGain, onSetGoal }: HeaderProps) => {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
       <div className="container flex h-16 items-center justify-between px-4">
@@ -21,7 +22,7 @@ export const Header = ({ onAddGain }: HeaderProps) => {
             <Plus className="h-4 w-4" />
             Adicionar ganho
           </Button>
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" onClick={onSetGoal} title="Definir meta mensal">
             <Target className="h-5 w-5" />
           </Button>
           <Button variant="ghost" size="icon">

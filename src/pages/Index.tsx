@@ -5,6 +5,7 @@ import { GainChart } from "@/components/GainChart";
 import { GainHistory } from "@/components/GainHistory";
 import { GoalProgress } from "@/components/GoalProgress";
 import { AddGainDialog } from "@/components/AddGainDialog";
+import { SetGoalDialog } from "@/components/SetGoalDialog";
 import { DollarSign, TrendingUp, Target } from "lucide-react";
 import { toast } from "sonner";
 
@@ -18,7 +19,8 @@ interface Gain {
 const Index = () => {
   const [gains, setGains] = useState<Gain[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [monthlyGoal] = useState(5000);
+  const [goalDialogOpen, setGoalDialogOpen] = useState(false);
+  const [monthlyGoal, setMonthlyGoal] = useState(5000);
 
   // Load gains from localStorage on mount
   useEffect(() => {
@@ -26,12 +28,22 @@ const Index = () => {
     if (savedGains) {
       setGains(JSON.parse(savedGains));
     }
+    
+    const savedGoal = localStorage.getItem("gaintrack-goal");
+    if (savedGoal) {
+      setMonthlyGoal(parseFloat(savedGoal));
+    }
   }, []);
 
   // Save gains to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem("gaintrack-gains", JSON.stringify(gains));
   }, [gains]);
+  
+  // Save goal to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("gaintrack-goal", monthlyGoal.toString());
+  }, [monthlyGoal]);
 
   const handleAddGain = (newGain: { amount: number; category: string; date: string }) => {
     const gain: Gain = {
@@ -42,6 +54,13 @@ const Index = () => {
     setGains([gain, ...gains]);
     toast.success("Ganho adicionado com sucesso! 🎉", {
       description: `R$ ${newGain.amount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} em ${newGain.category}`,
+    });
+  };
+  
+  const handleSetGoal = (newGoal: number) => {
+    setMonthlyGoal(newGoal);
+    toast.success("Meta atualizada! 🎯", {
+      description: `Nova meta: R$ ${newGoal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`,
     });
   };
 
@@ -82,7 +101,10 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header onAddGain={() => setDialogOpen(true)} />
+      <Header 
+        onAddGain={() => setDialogOpen(true)} 
+        onSetGoal={() => setGoalDialogOpen(true)}
+      />
       
       <main className="container px-4 py-8 space-y-8">
         {/* Stats Cards */}
@@ -147,6 +169,13 @@ const Index = () => {
         open={dialogOpen}
         onOpenChange={setDialogOpen}
         onSubmit={handleAddGain}
+      />
+      
+      <SetGoalDialog
+        open={goalDialogOpen}
+        onOpenChange={setGoalDialogOpen}
+        currentGoal={monthlyGoal}
+        onSubmit={handleSetGoal}
       />
     </div>
   );
