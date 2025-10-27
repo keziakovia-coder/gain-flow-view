@@ -85,7 +85,9 @@ const Index = () => {
   
   const growth = totalPreviousMonth > 0 
     ? ((totalMonthly - totalPreviousMonth) / totalPreviousMonth * 100).toFixed(1)
-    : "0.0";
+    : totalMonthly > 0 
+      ? "100.0"
+      : "0.0";
 
   // Prepare chart data - cumulative gains over time
   const chartData = gains
@@ -116,7 +118,7 @@ const Index = () => {
           />
           <StatsCard
             title="Crescimento"
-            value={`${growth}%`}
+            value={`${parseFloat(growth) >= 0 ? '+' : ''}${growth}%`}
             icon={TrendingUp}
             trend={parseFloat(growth) >= 0 ? "↗ Em crescimento" : "↘ Em queda"}
           />
