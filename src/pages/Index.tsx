@@ -81,6 +81,50 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Free Trial Section */}
+      <section className="container mx-auto px-4 py-12">
+        <Card className="max-w-3xl mx-auto p-8 md:p-12 bg-gradient-to-br from-primary/20 via-success/10 to-primary/20 border-2 border-primary/30 shadow-xl">
+          <div className="text-center space-y-6">
+            <div className="inline-flex items-center gap-2 bg-primary px-4 py-2 rounded-full text-primary-foreground font-semibold">
+              <Sparkles className="w-5 h-5" />
+              Oferta Especial
+            </div>
+            
+            <h2 className="text-3xl md:text-4xl font-bold">
+              Teste Grátis por 10 Dias
+            </h2>
+            
+            <p className="text-lg md:text-xl text-muted-foreground max-w-xl mx-auto">
+              Experimente todas as funcionalidades do Finance sem compromisso. 
+              Acesse gráficos, estatísticas e metas durante 10 dias completamente grátis!
+            </p>
+
+            <div className="space-y-3 py-4">
+              <p className="flex items-center justify-center gap-2 text-lg">
+                ✅ Acesso completo a todas as funcionalidades
+              </p>
+              <p className="flex items-center justify-center gap-2 text-lg">
+                ✅ Sem necessidade de cartão de crédito
+              </p>
+              <p className="flex items-center justify-center gap-2 text-lg">
+                ✅ Cancele quando quiser
+              </p>
+            </div>
+
+            <Link to="/dashboard">
+              <Button size="lg" className="gap-2 text-lg px-10 py-6 shadow-lg hover:shadow-xl transition-all">
+                <Sparkles className="w-5 h-5" />
+                Começar Teste Grátis
+              </Button>
+            </Link>
+
+            <p className="text-sm text-muted-foreground pt-2">
+              Após 10 dias, escolha um plano para continuar usando o Finance
+            </p>
+          </div>
+        </Card>
+      </section>
+
       {/* Features Section */}
       <section id="features" className="container mx-auto px-4 py-20">
         <div className="text-center mb-16">
