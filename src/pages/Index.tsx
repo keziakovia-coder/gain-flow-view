@@ -160,7 +160,7 @@ const Index = () => {
           <Link to="/dashboard">
             <Button size="lg" className="gap-2 text-lg px-8 py-6">
               <TrendingUp className="w-5 h-5" />
-              Começar Gratuitamente
+              Começar
             </Button>
           </Link>
         </Card>

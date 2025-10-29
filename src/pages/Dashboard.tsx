@@ -63,6 +63,16 @@ const Index = () => {
       description: `Nova meta: R$ ${newGoal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`,
     });
   };
+  
+  const handleClearAll = () => {
+    setGains([]);
+    setMonthlyGoal(0);
+    localStorage.removeItem("gaintrack-gains");
+    localStorage.removeItem("gaintrack-goal");
+    toast.success("Todos os dados foram limpos! 🗑️", {
+      description: "Você pode começar do zero agora.",
+    });
+  };
 
   // Calculate statistics
   const currentMonth = new Date().getMonth();
@@ -106,6 +116,7 @@ const Index = () => {
       <Header 
         onAddGain={() => setDialogOpen(true)} 
         onSetGoal={() => setGoalDialogOpen(true)}
+        onClearAll={handleClearAll}
       />
       
       <main className="container px-4 py-8 space-y-8">
