@@ -20,7 +20,7 @@ const Index = () => {
   const [gains, setGains] = useState<Gain[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [goalDialogOpen, setGoalDialogOpen] = useState(false);
-  const [monthlyGoal, setMonthlyGoal] = useState(5000);
+  const [monthlyGoal, setMonthlyGoal] = useState(0);
 
   // Load gains from localStorage on mount
   useEffect(() => {
