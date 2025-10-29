@@ -21,14 +21,36 @@ const Index = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [goalDialogOpen, setGoalDialogOpen] = useState(false);
   const [monthlyGoal, setMonthlyGoal] = useState(0);
+  const [trialExpired, setTrialExpired] = useState(false);
 
-  // Load gains from localStorage on mount
+  // Check trial period and load data from localStorage on mount
   useEffect(() => {
+    // Check trial period
+    const trialStartDate = localStorage.getItem("finance-trial-start");
+    
+    if (!trialStartDate) {
+      // First time user - start trial
+      const now = new Date().toISOString();
+      localStorage.setItem("finance-trial-start", now);
+    } else {
+      // Check if 10 days have passed
+      const startDate = new Date(trialStartDate);
+      const now = new Date();
+      const daysPassed = Math.floor((now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+      
+      if (daysPassed > 10) {
+        setTrialExpired(true);
+        return; // Don't load data if trial expired
+      }
+    }
+    
+    // Load gains from localStorage
     const savedGains = localStorage.getItem("finance-gains");
     if (savedGains) {
       setGains(JSON.parse(savedGains));
     }
     
+    // Load goal from localStorage
     const savedGoal = localStorage.getItem("finance-goal");
     if (savedGoal) {
       setMonthlyGoal(parseFloat(savedGoal));
@@ -110,6 +132,49 @@ const Index = () => {
       });
       return acc;
     }, []);
+
+  // If trial expired, show subscription message
+  if (trialExpired) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <div className="max-w-md w-full space-y-6 text-center">
+          <div className="space-y-2">
+            <h2 className="text-3xl font-bold">Teste Grátis Expirado</h2>
+            <p className="text-muted-foreground text-lg">
+              Seu período de teste de 10 dias terminou.
+            </p>
+          </div>
+          
+          <div className="p-6 bg-primary/5 rounded-lg border border-primary/20 space-y-4">
+            <p className="text-lg">
+              Para continuar acessando o <span className="font-bold text-primary">Finance</span> e todos os seus recursos, você precisa assinar um plano.
+            </p>
+            
+            <div className="space-y-2 text-muted-foreground">
+              <p className="flex items-center justify-center gap-2">
+                ✅ Histórico ilimitado de ganhos
+              </p>
+              <p className="flex items-center justify-center gap-2">
+                ✅ Gráficos e estatísticas avançadas
+              </p>
+              <p className="flex items-center justify-center gap-2">
+                ✅ Metas personalizadas
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8 rounded-md font-medium transition-colors">
+              Assinar Agora
+            </button>
+            <p className="text-sm text-muted-foreground">
+              Entre em contato para mais informações sobre os planos disponíveis.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
