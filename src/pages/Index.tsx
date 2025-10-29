@@ -35,7 +35,7 @@ const Index = () => {
           <div className="flex items-center gap-2">
             <TrendingUp className="w-8 h-8 text-primary" />
             <span className="text-2xl font-bold bg-gradient-to-r from-primary to-success bg-clip-text text-transparent">
-              GainTrack
+              Finance
             </span>
           </div>
           <Link to="/dashboard">
@@ -63,7 +63,7 @@ const Index = () => {
           </h1>
           
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            GainTrack é sua ferramenta pessoal para monitorar, analisar e celebrar cada conquista financeira. 
+            Finance é sua ferramenta pessoal para monitorar, analisar e celebrar cada conquista financeira. 
             Quanto mais você ganha, mais seu gráfico sobe!
           </p>
 

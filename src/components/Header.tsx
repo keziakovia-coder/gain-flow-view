@@ -26,7 +26,7 @@ export const Header = ({ onAddGain, onSetGoal, onClearAll }: HeaderProps) => {
         <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
           <span className="text-2xl">💰</span>
           <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            GainTrack
+            Finance
           </h1>
         </Link>
         

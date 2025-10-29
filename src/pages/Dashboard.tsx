@@ -24,12 +24,12 @@ const Index = () => {
 
   // Load gains from localStorage on mount
   useEffect(() => {
-    const savedGains = localStorage.getItem("gaintrack-gains");
+    const savedGains = localStorage.getItem("finance-gains");
     if (savedGains) {
       setGains(JSON.parse(savedGains));
     }
     
-    const savedGoal = localStorage.getItem("gaintrack-goal");
+    const savedGoal = localStorage.getItem("finance-goal");
     if (savedGoal) {
       setMonthlyGoal(parseFloat(savedGoal));
     }
@@ -37,12 +37,12 @@ const Index = () => {
 
   // Save gains to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem("gaintrack-gains", JSON.stringify(gains));
+    localStorage.setItem("finance-gains", JSON.stringify(gains));
   }, [gains]);
   
   // Save goal to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem("gaintrack-goal", monthlyGoal.toString());
+    localStorage.setItem("finance-goal", monthlyGoal.toString());
   }, [monthlyGoal]);
 
   const handleAddGain = (newGain: { amount: number; category: string; date: string }) => {
@@ -67,8 +67,8 @@ const Index = () => {
   const handleClearAll = () => {
     setGains([]);
     setMonthlyGoal(0);
-    localStorage.removeItem("gaintrack-gains");
-    localStorage.removeItem("gaintrack-goal");
+    localStorage.removeItem("finance-gains");
+    localStorage.removeItem("finance-goal");
     toast.success("Todos os dados foram limpos! 🗑️", {
       description: "Você pode começar do zero agora.",
     });
