@@ -179,6 +179,12 @@ const Index = () => {
           </div>
 
           <div className="space-y-3">
+            <button 
+              onClick={handleRestartTrial}
+              className="w-full bg-success text-success-foreground hover:bg-success/90 h-11 px-8 rounded-md font-medium transition-colors"
+            >
+              Reiniciar Teste Grátis
+            </button>
             <button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8 rounded-md font-medium transition-colors">
               Assinar Agora
             </button>
