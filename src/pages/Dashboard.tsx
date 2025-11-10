@@ -101,6 +101,16 @@ const Index = () => {
     });
   };
 
+  const handleRestartTrial = () => {
+    const now = new Date().toISOString();
+    localStorage.setItem("finance-trial-start", now);
+    setDaysRemaining(10);
+    setTrialExpired(false);
+    toast.success("Teste reiniciado! 🎉", {
+      description: "Você tem mais 10 dias de teste grátis.",
+    });
+  };
+
   // Calculate statistics
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
@@ -201,7 +211,7 @@ const Index = () => {
                 Aproveite todos os recursos sem compromisso
               </p>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <div className="text-right">
                 <p className="text-3xl font-bold text-primary">
                   {daysRemaining}
@@ -210,6 +220,12 @@ const Index = () => {
                   {daysRemaining === 1 ? 'dia restante' : 'dias restantes'}
                 </p>
               </div>
+              <button
+                onClick={handleRestartTrial}
+                className="px-4 py-2 text-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+              >
+                Reiniciar Teste
+              </button>
             </div>
           </div>
         </div>
