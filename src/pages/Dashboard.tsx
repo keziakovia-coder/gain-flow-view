@@ -22,6 +22,7 @@ const Index = () => {
   const [goalDialogOpen, setGoalDialogOpen] = useState(false);
   const [monthlyGoal, setMonthlyGoal] = useState(0);
   const [trialExpired, setTrialExpired] = useState(false);
+  const [daysRemaining, setDaysRemaining] = useState(10);
 
   // Check trial period and load data from localStorage on mount
   useEffect(() => {
@@ -32,11 +33,15 @@ const Index = () => {
       // First time user - start trial
       const now = new Date().toISOString();
       localStorage.setItem("finance-trial-start", now);
+      setDaysRemaining(10);
     } else {
       // Check if 10 days have passed
       const startDate = new Date(trialStartDate);
       const now = new Date();
       const daysPassed = Math.floor((now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+      const remaining = 10 - daysPassed;
+      
+      setDaysRemaining(remaining);
       
       if (daysPassed > 10) {
         setTrialExpired(true);
@@ -185,6 +190,30 @@ const Index = () => {
       />
       
       <main className="container px-4 py-8 space-y-8">
+        {/* Trial Countdown */}
+        <div className="bg-gradient-to-r from-primary/20 to-success/20 border border-primary/30 rounded-lg p-4 md:p-6">
+          <div className="flex items-center justify-between flex-wrap gap-4">
+            <div className="space-y-1">
+              <h3 className="text-lg font-semibold text-foreground">
+                Teste Grátis Ativo
+              </h3>
+              <p className="text-sm text-muted-foreground">
+                Aproveite todos os recursos sem compromisso
+              </p>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="text-right">
+                <p className="text-3xl font-bold text-primary">
+                  {daysRemaining}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  {daysRemaining === 1 ? 'dia restante' : 'dias restantes'}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Stats Cards */}
         <div className="grid gap-4 md:grid-cols-3">
           <StatsCard
