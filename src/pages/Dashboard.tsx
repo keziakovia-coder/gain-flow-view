@@ -22,38 +22,13 @@ const Index = () => {
   const [goalDialogOpen, setGoalDialogOpen] = useState(false);
   const [monthlyGoal, setMonthlyGoal] = useState(0);
 
-  // Check trial period and load data from localStorage on mount
+  // Load data from localStorage on mount
   useEffect(() => {
-    // Check trial period
-    const trialStartDate = localStorage.getItem("finance-trial-start");
-    
-    if (!trialStartDate) {
-      // First time user - start trial
-      const now = new Date().toISOString();
-      localStorage.setItem("finance-trial-start", now);
-      setDaysRemaining(10);
-    } else {
-      // Check if 10 days have passed
-      const startDate = new Date(trialStartDate);
-      const now = new Date();
-      const daysPassed = Math.floor((now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-      const remaining = 10 - daysPassed;
-      
-      setDaysRemaining(remaining);
-      
-      if (daysPassed > 10) {
-        setTrialExpired(true);
-        return; // Don't load data if trial expired
-      }
-    }
-    
-    // Load gains from localStorage
     const savedGains = localStorage.getItem("finance-gains");
     if (savedGains) {
       setGains(JSON.parse(savedGains));
     }
-    
-    // Load goal from localStorage
+
     const savedGoal = localStorage.getItem("finance-goal");
     if (savedGoal) {
       setMonthlyGoal(parseFloat(savedGoal));
@@ -64,7 +39,7 @@ const Index = () => {
   useEffect(() => {
     localStorage.setItem("finance-gains", JSON.stringify(gains));
   }, [gains]);
-  
+
   // Save goal to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem("finance-goal", monthlyGoal.toString());
@@ -75,20 +50,20 @@ const Index = () => {
       id: Date.now().toString(),
       ...newGain,
     };
-    
+
     setGains([gain, ...gains]);
     toast.success("Ganho adicionado com sucesso! 🎉", {
       description: `R$ ${newGain.amount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} em ${newGain.category}`,
     });
   };
-  
+
   const handleSetGoal = (newGoal: number) => {
     setMonthlyGoal(newGoal);
     toast.success("Meta atualizada! 🎯", {
       description: `Nova meta: R$ ${newGoal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`,
     });
   };
-  
+
   const handleClearAll = () => {
     setGains([]);
     setMonthlyGoal(0);
@@ -99,27 +74,17 @@ const Index = () => {
     });
   };
 
-  const handleRestartTrial = () => {
-    const now = new Date().toISOString();
-    localStorage.setItem("finance-trial-start", now);
-    setDaysRemaining(10);
-    setTrialExpired(false);
-    toast.success("Teste reiniciado! 🎉", {
-      description: "Você tem mais 10 dias de teste grátis.",
-    });
-  };
-
   // Calculate statistics
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
-  
+
   const monthlyGains = gains.filter(g => {
     const gainDate = new Date(g.date);
     return gainDate.getMonth() === currentMonth && gainDate.getFullYear() === currentYear;
   });
 
   const totalMonthly = monthlyGains.reduce((sum, g) => sum + g.amount, 0);
-  
+
   const previousMonth = currentMonth === 0 ? 11 : currentMonth - 1;
   const previousYear = currentMonth === 0 ? currentYear - 1 : currentYear;
   const previousMonthGains = gains.filter(g => {
@@ -127,10 +92,10 @@ const Index = () => {
     return gainDate.getMonth() === previousMonth && gainDate.getFullYear() === previousYear;
   });
   const totalPreviousMonth = previousMonthGains.reduce((sum, g) => sum + g.amount, 0);
-  
-  const growth = totalPreviousMonth > 0 
+
+  const growth = totalPreviousMonth > 0
     ? ((totalMonthly - totalPreviousMonth) / totalPreviousMonth * 100).toFixed(1)
-    : totalMonthly > 0 
+    : totalMonthly > 0
       ? "100.0"
       : "0.0";
 
@@ -146,94 +111,15 @@ const Index = () => {
       return acc;
     }, []);
 
-  // If trial expired, show subscription message
-  if (trialExpired) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <div className="max-w-md w-full space-y-6 text-center">
-          <div className="space-y-2">
-            <h2 className="text-3xl font-bold">Teste Grátis Expirado</h2>
-            <p className="text-muted-foreground text-lg">
-              Seu período de teste de 10 dias terminou.
-            </p>
-          </div>
-          
-          <div className="p-6 bg-primary/5 rounded-lg border border-primary/20 space-y-4">
-            <p className="text-lg">
-              Para continuar acessando o <span className="font-bold text-primary">Finance</span> e todos os seus recursos, você precisa assinar um plano.
-            </p>
-            
-            <div className="space-y-2 text-muted-foreground">
-              <p className="flex items-center justify-center gap-2">
-                ✅ Histórico ilimitado de ganhos
-              </p>
-              <p className="flex items-center justify-center gap-2">
-                ✅ Gráficos e estatísticas avançadas
-              </p>
-              <p className="flex items-center justify-center gap-2">
-                ✅ Metas personalizadas
-              </p>
-            </div>
-          </div>
-
-          <div className="space-y-3">
-            <button 
-              onClick={handleRestartTrial}
-              className="w-full bg-success text-success-foreground hover:bg-success/90 h-11 px-8 rounded-md font-medium transition-colors"
-            >
-              Reiniciar Teste Grátis
-            </button>
-            <button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8 rounded-md font-medium transition-colors">
-              Assinar Agora
-            </button>
-            <p className="text-sm text-muted-foreground">
-              Entre em contato para mais informações sobre os planos disponíveis.
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-background">
-      <Header 
-        onAddGain={() => setDialogOpen(true)} 
+      <Header
+        onAddGain={() => setDialogOpen(true)}
         onSetGoal={() => setGoalDialogOpen(true)}
         onClearAll={handleClearAll}
       />
-      
-      <main className="container px-4 py-8 space-y-8">
-        {/* Trial Countdown */}
-        <div className="bg-gradient-to-r from-primary/20 to-success/20 border border-primary/30 rounded-lg p-4 md:p-6">
-          <div className="flex items-center justify-between flex-wrap gap-4">
-            <div className="space-y-1">
-              <h3 className="text-lg font-semibold text-foreground">
-                Teste Grátis Ativo
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                Aproveite todos os recursos sem compromisso
-              </p>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="text-right">
-                <p className="text-3xl font-bold text-primary">
-                  {daysRemaining}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {daysRemaining === 1 ? 'dia restante' : 'dias restantes'}
-                </p>
-              </div>
-              <button
-                onClick={handleRestartTrial}
-                className="px-4 py-2 text-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
-              >
-                Reiniciar Teste
-              </button>
-            </div>
-          </div>
-        </div>
 
+      <main className="container px-4 py-8 space-y-8">
         {/* Stats Cards */}
         <div className="grid gap-4 md:grid-cols-3">
           <StatsCard
@@ -297,7 +183,7 @@ const Index = () => {
         onOpenChange={setDialogOpen}
         onSubmit={handleAddGain}
       />
-      
+
       <SetGoalDialog
         open={goalDialogOpen}
         onOpenChange={setGoalDialogOpen}
