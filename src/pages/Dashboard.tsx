@@ -21,6 +21,7 @@ const Index = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [goalDialogOpen, setGoalDialogOpen] = useState(false);
   const [monthlyGoal, setMonthlyGoal] = useState(0);
+  const [loaded, setLoaded] = useState(false);
 
   // Load data from localStorage on mount
   useEffect(() => {
@@ -33,17 +34,20 @@ const Index = () => {
     if (savedGoal) {
       setMonthlyGoal(parseFloat(savedGoal));
     }
+    setLoaded(true);
   }, []);
 
   // Save gains to localStorage whenever they change
   useEffect(() => {
+    if (!loaded) return;
     localStorage.setItem("finance-gains", JSON.stringify(gains));
-  }, [gains]);
+  }, [gains, loaded]);
 
   // Save goal to localStorage whenever it changes
   useEffect(() => {
+    if (!loaded) return;
     localStorage.setItem("finance-goal", monthlyGoal.toString());
-  }, [monthlyGoal]);
+  }, [monthlyGoal, loaded]);
 
   const handleAddGain = (newGain: { amount: number; category: string; date: string }) => {
     const gain: Gain = {
