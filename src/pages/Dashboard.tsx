@@ -21,8 +21,6 @@ const Index = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [goalDialogOpen, setGoalDialogOpen] = useState(false);
   const [monthlyGoal, setMonthlyGoal] = useState(0);
-  const [trialExpired, setTrialExpired] = useState(false);
-  const [daysRemaining, setDaysRemaining] = useState(10);
 
   // Check trial period and load data from localStorage on mount
   useEffect(() => {
