@@ -82,8 +82,14 @@ const Index = () => {
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
 
+  // Parse "YYYY-MM-DD" como data local (evita problemas de fuso horário)
+  const parseLocalDate = (dateStr: string) => {
+    const [y, m, d] = dateStr.split('-').map(Number);
+    return new Date(y, (m || 1) - 1, d || 1);
+  };
+
   const monthlyGains = gains.filter(g => {
-    const gainDate = new Date(g.date);
+    const gainDate = parseLocalDate(g.date);
     return gainDate.getMonth() === currentMonth && gainDate.getFullYear() === currentYear;
   });
 
@@ -92,7 +98,7 @@ const Index = () => {
   const previousMonth = currentMonth === 0 ? 11 : currentMonth - 1;
   const previousYear = currentMonth === 0 ? currentYear - 1 : currentYear;
   const previousMonthGains = gains.filter(g => {
-    const gainDate = new Date(g.date);
+    const gainDate = parseLocalDate(g.date);
     return gainDate.getMonth() === previousMonth && gainDate.getFullYear() === previousYear;
   });
   const totalPreviousMonth = previousMonthGains.reduce((sum, g) => sum + g.amount, 0);
@@ -105,11 +111,11 @@ const Index = () => {
 
   // Prepare chart data - cumulative gains over time
   const chartData = gains
-    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    .sort((a, b) => parseLocalDate(a.date).getTime() - parseLocalDate(b.date).getTime())
     .reduce((acc: Array<{ date: string; total: number }>, gain) => {
       const lastTotal = acc.length > 0 ? acc[acc.length - 1].total : 0;
       acc.push({
-        date: new Date(gain.date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
+        date: parseLocalDate(gain.date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
         total: lastTotal + gain.amount,
       });
       return acc;
