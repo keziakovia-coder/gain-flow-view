@@ -25,7 +25,9 @@ const RouteTracker = () => {
 
   // Save current route whenever it changes
   useEffect(() => {
-    if (location.pathname !== "/") {
+    if (location.pathname === "/") {
+      localStorage.removeItem("finance-last-route");
+    } else {
       localStorage.setItem("finance-last-route", location.pathname);
     }
   }, [location.pathname]);
